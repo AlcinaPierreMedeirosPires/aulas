@@ -39,8 +39,7 @@
                 document.body.insertBefore(this.canvas, document.body.childNodes[0]);
                 this.interval = setInterval(updateGameArea, 20);
                 window.addEventListener('keydown', function(e) {
-                    myGameArea.key = e.keyCode;
-                    handleKeyPress(myGameArea.key);
+                    handleKeyPress(e.keyCode);
                 });
                 window.addEventListener('keyup', function(e) {
                     handleKeyRelease(e.keyCode);
@@ -108,14 +107,14 @@
             switch(key) {
                 // Controles do Jogador 2 (Teclas de seta)
                 case 37: jogador2.speedX = -1; break; // esquerda
-                case 39: jogador2.speedX = 1;  break; // direita
+                case 39: jogador2.speedX = 1; break;  // direita
                 case 38: jogador2.speedY = -1; break; // cima
-                case 40: jogador2.speedY = 1;  break; // baixo
+                case 40: jogador2.speedY = 1; break;  // baixo
                 // Controles do Jogador 1 (W, A, S, D)
                 case 65: jogador1.speedX = -1; break; // A (esquerda)
-                case 68: jogador1.speedX = 1;  break; // D (direita)
+                case 68: jogador1.speedX = 1; break;  // D (direita)
                 case 87: jogador1.speedY = -1; break; // W (cima)
-                case 83: jogador1.speedY = 1;  break; // S (baixo)
+                case 83: jogador1.speedY = 1; break;  // S (baixo)
             }
         }
 
