@@ -40,11 +40,10 @@
                 this.interval = setInterval(updateGameArea, 20);
                 window.addEventListener('keydown', function(e) {
                     myGameArea.key = e.keyCode;
-                    handleKeyPress();
+                    handleKeyPress(myGameArea.key);
                 });
                 window.addEventListener('keyup', function(e) {
-                    myGameArea.key = false;
-                    handleKeyRelease();
+                    handleKeyRelease(e.keyCode);
                 });
             },
             clear: function() {
@@ -105,20 +104,34 @@
             }
         }
 
-        function handleKeyPress() {
-            if (myGameArea.key == 37) { jogador2.speedX = -1; } // esquerda
-            if (myGameArea.key == 39) { jogador2.speedX = 1; }  // direita
-            if (myGameArea.key == 38) { jogador2.speedY = -1; } // cima
-            if (myGameArea.key == 40) { jogador2.speedY = 1; }  // baixo
-            if (myGameArea.key == 65) { jogador1.speedX = -1; } // A (esquerda)
-            if (myGameArea.key == 68) { jogador1.speedX = 1; }  // D (direita)
-            if (myGameArea.key == 87) { jogador1.speedY = -1; } // W (cima)
-            if (myGameArea.key == 83) { jogador1.speedY = 1; }  // S (baixo)
+        function handleKeyPress(key) {
+            switch(key) {
+                // Controles do Jogador 2 (Teclas de seta)
+                case 37: jogador2.speedX = -1; break; // esquerda
+                case 39: jogador2.speedX = 1;  break; // direita
+                case 38: jogador2.speedY = -1; break; // cima
+                case 40: jogador2.speedY = 1;  break; // baixo
+                // Controles do Jogador 1 (W, A, S, D)
+                case 65: jogador1.speedX = -1; break; // A (esquerda)
+                case 68: jogador1.speedX = 1;  break; // D (direita)
+                case 87: jogador1.speedY = -1; break; // W (cima)
+                case 83: jogador1.speedY = 1;  break; // S (baixo)
+            }
         }
 
-        function handleKeyRelease() {
-            if ([37, 39, 38, 40].includes(myGameArea.key)) { jogador2.speedX = 0; jogador2.speedY = 0; }
-            if ([65, 68, 87, 83].includes(myGameArea.key)) { jogador1.speedX = 0; jogador1.speedY = 0; }
+        function handleKeyRelease(key) {
+            switch(key) {
+                // Controles do Jogador 2 (Teclas de seta)
+                case 37: jogador2.speedX = 0; break; // esquerda
+                case 39: jogador2.speedX = 0; break; // direita
+                case 38: jogador2.speedY = 0; break; // cima
+                case 40: jogador2.speedY = 0; break; // baixo
+                // Controles do Jogador 1 (W, A, S, D)
+                case 65: jogador1.speedX = 0; break; // A (esquerda)
+                case 68: jogador1.speedX = 0; break; // D (direita)
+                case 87: jogador1.speedY = 0; break; // W (cima)
+                case 83: jogador1.speedY = 0; break; // S (baixo)
+            }
         }
 
         function movePlayer(player, direction) {
