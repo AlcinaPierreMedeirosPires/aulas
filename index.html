@@ -1,7 +1,5 @@
 <!DOCTYPE html>
 
-<!-- Esta aula tem como objetivo apresentar e trabalhar imagens -->
-
 <html lang="pt-BR">
 
 <head>
@@ -34,15 +32,25 @@ border:1px solid #d3d3d3;
 
 <script>
 
-var myGamePiece;
+           var myGamePiece_red;
+
+           var myObstacle;
+
+
+
 
            function startGame() {
 
-               myGamePiece = new component(30, 30, "red", 10, 120);
+               myGamePiece_red = new component(30, 30, "red", 10, 120);
+
+               myObstacle = new component(10, 200, "green", 300, 120);
 
                myGameArea.start();
 
            }
+
+
+
 
            var myGameArea = {
 
@@ -60,15 +68,36 @@ var myGamePiece;
 
                    this.interval = setInterval(updateGameArea, 20);
 
-               },
+                   window.addEventListener('keydown', function (e) {
+
+                           myGameArea.key = e.keyCode;
+
+                       })
+
+                       window.addEventListener('keyup', function (e) {
+
+                           myGameArea.key = false;
+
+                       })
+
+                   },
 
                clear : function() {
 
                    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
+               },
+
+               stop : function() {
+
+                   clearInterval(this.interval);
+
                }
 
            }
+
+
+
 
            function component(width, height, color, x, y) {
 
@@ -94,11 +123,99 @@ var myGamePiece;
 
                }
 
+               this.crashWith = function(otherobj) {
+
+                   var myleft = this.x;
+
+                   var myright = this.x + (this.width);
+
+                   var mytop = this.y;
+
+                   var mybottom = this.y + (this.height);
+
+                   var otherleft = otherobj.x;
+
+                   var otherright = otherobj.x + (otherobj.width);
+
+                   var othertop = otherobj.y;
+
+                   var otherbottom = otherobj.y + (otherobj.height);
+
+                   var crash = true;
+
+                   if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+
+                       crash = false;
+
+                   }
+
+                   return crash;
+
+               }
+
                this.newPos = function() {
 
                    this.x += this.speedX;
 
                    this.y += this.speedY;
+
+                   this.hitTop();
+
+                   this.hitBottom();
+
+                   this.hitLeft();
+
+                   this.hitRight();
+
+                   
+
+               }
+
+               this.hitTop = function() {
+
+                   var rocktop = 0;
+
+                   if (this.y < rocktop) {
+
+                       this.y = rocktop;
+
+                   }
+
+               }
+
+               this.hitBottom = function() {
+
+                   var rockbottom = myGameArea.canvas.height - this.height;
+
+                   if (this.y > rockbottom) {
+
+                       this.y = rockbottom;
+
+                   }
+
+               }
+
+               this.hitLeft = function() {
+
+                   var rockleft = 0;
+
+                   if (this.x < rockleft) {
+
+                       this.x = rockleft;
+
+                   }
+
+               }
+
+               this.hitRight = function() {
+
+                   var rockright = myGameArea.canvas.width - this.width;
+
+                   if (this.x > rockright) {
+
+                       this.x = rockright;
+
+                   }
 
                }
 
@@ -106,66 +223,51 @@ var myGamePiece;
 
            function updateGameArea() {
 
-               myGameArea.clear();
+               if (myGamePiece_red.crashWith(myObstacle)) {
 
-               myGamePiece.newPos();
+                   myGameArea.stop();
 
-               myGamePiece.update();
+               } else {
 
-           }
+                   myGameArea.clear();
 
-           function moveup() {
+                   myGamePiece_red.newPos();
 
-               myGamePiece.speedY -= 1;
+                   myObstacle.update();
 
-           }
+                   myGamePiece_red.speedX = 0;
 
-           function movedown() {
+                   myGamePiece_red.speedY = 0;
 
-               myGamePiece.speedY += 1;
+                   if (myGameArea.key && myGameArea.key == 37) {myGamePiece_red.speedX = -1; }
 
-           }
+                   if (myGameArea.key && myGameArea.key == 39) {myGamePiece_red.speedX = 1; }
 
+                   if (myGameArea.key && myGameArea.key == 38) {myGamePiece_red.speedY = -1; }
 
+                   if (myGameArea.key && myGameArea.key == 40) {myGamePiece_red.speedY = 1; }
 
+                   myGamePiece_red.newPos();
 
-           function moveleft() {
+                   myGamePiece_red.update();
 
-               myGamePiece.speedX -= 1;
+               }
 
-           }
+           }                    
 
-           function moveright() {
+       </script>                
 
-               myGamePiece.speedX += 1;
+                   <!-- Fim do Script do canvas-->
 
-           }
+   </head>
 
-</script>
+   <body onload="startGame();">
 
+       <div>
 
+           <p style="text-align:center;">Para saber os outros códigos dos teclados entre na seguinte página de digite a tecla que você deseja saber o código:</p>
 
-<!-- Fim do Script do canvas-->
-
-
-
-
-
-
-
-</head>
-
-<body onload="startGame();">
-
-       <div style="text-align:center;width:480px;">
-
-           <button click="moveup()">UP</button><br><br>
-
-           <button click="moveleft()">LEFT</button>
-
-           <button click="moveright()">RIGHT</button><br><br>
-
-           <button click="movedown()">DOWN</button>
+           <p style="text-align:center;"><a href="https://www.w3.org/2002/09/tests/keys.html">Códigos das teclas</a></p>
 
        </div>
 
