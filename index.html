@@ -59,7 +59,7 @@ DESCRIÇÃO:
             },
             stop: function() {
                 clearInterval(this.interval);
-                alert("Jogo finalizado!");
+                alert("GAME OVER");
             }
         }
 
@@ -101,7 +101,7 @@ DESCRIÇÃO:
 
         function updateGameArea() {
             if (jogador1.crashWith(jogador2)) {
-                alert("COLISÃO DETECTADA");
+                alert("BOOM! VOCÊ BATEU!");
                 myGameArea.stop();
             } else {
                 myGameArea.clear();
