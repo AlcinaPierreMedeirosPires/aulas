@@ -8,168 +8,316 @@ DESCRIÇÃO:
 
 
 <!DOCTYPE html>
+
 <html lang="pt-BR">
+
 <head>
-    <title>Jogo de Colisão</title>
-    <link rel="stylesheet" href="styles.css">
-    <link href="https://fonts.googleapis.com/css?family=Roboto|Sirin+Stencil" rel="stylesheet">
-    <meta charset="UTF-8">
-    <link rel="icon" href="Imagens/Icon1/favicon.ico" type="image/x-icon?v=2" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        canvas {
-            border: 1px solid #d3d3d3;
-            background-color: #A0A0A0;
-        }
-        .controls {
-            text-align: center;
-            margin-top: 20px;
-        }
-        button {
-            margin: 5px;
-            padding: 10px;
-        }
-    </style>
-    <script>
-        var jogador1, jogador2;
 
-        function startGame() {
-            jogador1 = new component(30, 30, "red", 10, 120);
-            jogador2 = new component(30, 30, "blue", 420, 120);
-            myGameArea.start();
-        }
+<title>Imagem</title>
 
-        var myGameArea = {
-            canvas: document.createElement("canvas"),
-            start: function() {
-                this.canvas.width = 480;
-                this.canvas.height = 270;
-                this.context = this.canvas.getContext("2d");
-                document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-                this.interval = setInterval(updateGameArea, 20);
-                window.addEventListener('keydown', function(e) {
-                    handleKeyPress(e.keyCode);
-                });
-                window.addEventListener('keyup', function(e) {
-                    handleKeyRelease(e.keyCode);
-                });
-            },
-            clear: function() {
-                this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            },
-            stop: function() {
-                clearInterval(this.interval);
-                alert("GAME OVER");
-            }
-        }
+<link rel="stylesheet" href="styles.css">
 
-        function component(width, height, color, x, y) {
-            this.width = width;
-            this.height = height;
-            this.speedX = 0;
-            this.speedY = 0;
-            this.x = x;
-            this.y = y;
-            this.update = function() {
-                ctx = myGameArea.context;
-                ctx.fillStyle = color;
-                ctx.fillRect(this.x, this.y, this.width, this.height);
-            }
-            this.crashWith = function(otherobj) {
-                var myleft = this.x;
-                var myright = this.x + this.width;
-                var mytop = this.y;
-                var mybottom = this.y + this.height;
-                var otherleft = otherobj.x;
-                var otherright = otherobj.x + otherobj.width;
-                var othertop = otherobj.y;
-                var otherbottom = otherobj.y + otherobj.height;
-                return !(mybottom < othertop || mytop > otherbottom || myright < otherleft || myleft > otherright);
-            }
-            this.newPos = function() {
-                this.x += this.speedX;
-                this.y += this.speedY;
-                this.hitBounds();
-            }
-            this.hitBounds = function() {
-                if (this.x < 0) this.x = 0;
-                if (this.x > myGameArea.canvas.width - this.width) this.x = myGameArea.canvas.width - this.width;
-                if (this.y < 0) this.y = 0;
-                if (this.y > myGameArea.canvas.height - this.height) this.y = myGameArea.canvas.height - this.height;
-            }
-        }
+<link href="https://fonts.googleapis.com/css?family=Roboto|Sirin+Stencil" rel="stylesheet">
 
-        function updateGameArea() {
-            if (jogador1.crashWith(jogador2)) {
-                alert("BOOM! VOCÊ BATEU!");
-                myGameArea.stop();
-            } else {
-                myGameArea.clear();
-                jogador1.newPos();
-                jogador2.newPos();
-                jogador1.update();
-                jogador2.update();
-            }
-        }
+<meta charset="UTF-8">
 
-        function handleKeyPress(key) {
-            switch(key) {
-                // Controles do Jogador 2 (Teclas de seta)
-                case 37: jogador2.speedX = -1; break; // esquerda
-                case 39: jogador2.speedX = 1; break;  // direita
-                case 38: jogador2.speedY = -1; break; // cima
-                case 40: jogador2.speedY = 1; break;  // baixo
-                // Controles do Jogador 1 (W, A, S, D)
-                case 65: jogador1.speedX = -1; break; // A (esquerda)
-                case 68: jogador1.speedX = 1; break;  // D (direita)
-                case 87: jogador1.speedY = -1; break; // W (cima)
-                case 83: jogador1.speedY = 1; break;  // S (baixo)
-            }
-        }
+<link rel="icon" href="Imagens/Icon1/favicon.ico" type="image/x-icon"?v=2 />
 
-        function handleKeyRelease(key) {
-            switch(key) {
-                // Controles do Jogador 2 (Teclas de seta)
-                case 37: jogador2.speedX = 0; break; // esquerda
-                case 39: jogador2.speedX = 0; break; // direita
-                case 38: jogador2.speedY = 0; break; // cima
-                case 40: jogador2.speedY = 0; break; // baixo
-                // Controles do Jogador 1 (W, A, S, D)
-                case 65: jogador1.speedX = 0; break; // A (esquerda)
-                case 68: jogador1.speedX = 0; break; // D (direita)
-                case 87: jogador1.speedY = 0; break; // W (cima)
-                case 83: jogador1.speedY = 0; break; // S (baixo)
-            }
-        }
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-        function movePlayer(player, direction) {
-            switch(direction) {
-                case 'up': player.speedY = -1; break;
-                case 'down': player.speedY = 1; break;
-                case 'left': player.speedX = -1; break;
-                case 'right': player.speedX = 1; break;
-            }
-            player.newPos();
-        }
-    </script>
-</head>
-<body onload="startGame();">
-    <div class="controls">
-        <h1>Controles do Jogo</h1>
-        <div>
-            <h2>Jogador 1 (Vermelho)</h2>
-            <button onclick="movePlayer(jogador1, 'up')">Cima</button>
-            <button onclick="movePlayer(jogador1, 'down')">Baixo</button>
-            <button onclick="movePlayer(jogador1, 'left')">Esquerda</button>
-            <button onclick="movePlayer(jogador1, 'right')">Direita</button>
-        </div>
-        <div>
-            <h2>Jogador 2 (Azul)</h2>
-            <button onclick="movePlayer(jogador2, 'up')">Cima</button>
-            <button onclick="movePlayer(jogador2, 'down')">Baixo</button>
-            <button onclick="movePlayer(jogador2, 'left')">Esquerda</button>
-            <button onclick="movePlayer(jogador2, 'right')">Direita</button>
-        </div>
-    </div>
+<!-- Incício do Script do Canvas -->
+
+<style>
+
+canvas {
+
+border:1px solid #d3d3d3;
+
+               background-color: #A0A0A0;
+
+}
+
+</style>
+
+<script>
+
+           var myGamePiece_red;
+
+           var myGamePiece_blue;
+
+
+
+
+           function startGame() {
+
+               myGamePiece_red = new component(30, 30, "red",  300, 120);
+
+               myGamePiece_blue = new component(30, 30, "blue",10, 120);
+
+               myGameArea.start();
+
+           }
+
+//nossos 2 componentes//
+
+
+           var myGameArea = {
+
+               canvas : document.createElement("canvas"),
+
+               start : function() {
+
+                   this.canvas.width = 480;
+
+                   this.canvas.height = 270;
+
+                   // criação do elemento canvas que e o start//
+
+                   this.context = this.canvas.getContext("2d");
+
+                   document.body.insertBefore(this.canvas, document.body.childNodes[0]);
+
+                   this.interval = setInterval(updateGameArea, 20);
+
+                   window.addEventListener('keydown', function (e) {
+
+                           myGameArea.key = e.keyCode;
+
+                       })
+
+                       window.addEventListener('keyup', function (e) {
+
+                           myGameArea.key = false;
+
+                       })
+
+                   },
+
+                   // eventos de pressionar e soltar teclas, junto do amazenamento da função do objeto para se aplicar ao canvas//
+
+
+
+               clear : function() {
+
+                   this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+               },
+
+               stop : function() {
+
+                   clearInterval(this.interval);
+
+               }
+
+           }
+
+// apagar e recriar o quadrado//
+
+
+           function component(width, height, color, x, y) {
+
+               this.width = width;
+
+               this.height = height;
+
+               this.speedX = 0;
+
+               this.speedY = 0;
+
+               this.x = x;
+
+               this.y = y;
+
+
+// tamanho, velocidade inicial e posição//
+
+               this.update = function() {
+
+                   ctx = myGameArea.context;
+
+                   ctx.fillStyle = color;
+
+                   ctx.fillRect(this.x, this.y, this.width, this.height);
+
+               }
+               // toda vez que é atualizado, pega o contexto e aplica ao objeto//
+
+               this.crashWith = function(otherobj) {
+
+                   var myleft = this.x;
+
+                   var myright = this.x + (this.width);
+
+                   var mytop = this.y;
+
+                   var mybottom = this.y + (this.height);
+
+                   var otherleft = otherobj.x;
+
+                   var otherright = otherobj.x + (otherobj.width);
+
+                   var othertop = otherobj.y;
+
+                   var otherbottom = otherobj.y + (otherobj.height);
+
+                   var crash = true;
+
+                   //calcula os limites dos dois objetos e verifica se eles se sobrepõemn, junções da cordenada e  largura//
+
+                   if ((mybottom < othertop) || (mytop > otherbottom) || (myright < otherleft) || (myleft > otherright)) {
+
+                       crash = false;
+
+                   }
+                   // embaixo com o cima, encima com baixo, direita com esquerda, esquerda com direita//
+
+                   return crash;
+
+               }
+
+               this.newPos = function() {
+
+                   this.x += this.speedX;
+
+                   this.y += this.speedY;
+
+                   this.hitTop();
+
+                   this.hitBottom();
+
+                   this.hitLeft();
+
+                   this.hitRight();
+
+                   
+
+               }
+
+               this.hitTop = function() {
+
+                   var rocktop = 0;
+
+                   if (this.y < rocktop) {
+
+                       this.y = rocktop;
+                       alert("COLISÃO DETECTADA");
+                   }
+
+               }
+
+               this.hitBottom = function() {
+
+                   var rockbottom = myGameArea.canvas.height - this.height;
+
+                   if (this.y > rockbottom) {
+
+                       this.y = rockbottom;
+                       alert("COLISÃO DETECTADA");
+                   }
+
+               }
+
+               this.hitLeft = function() {
+
+                   var rockleft = 0;
+
+                   if (this.x < rockleft) {
+
+                       this.x = rockleft;
+                       alert("COLISÃO DETECTADA");
+                   }
+
+               }
+
+               this.hitRight = function() {
+
+                   var rockright = myGameArea.canvas.width - this.width;
+
+                   if (this.x > rockright) {
+
+                       this.x = rockright;
+                       alert("COLISÃO DETECTADA");
+                   }
+
+               }
+
+           }
+
+           //condições para cada uma das colisões, adicionados o alerta//
+
+           function updateGameArea() {
+
+               if (myGamePiece_red.crashWith(myGamePiece_blue)) {
+
+                   myGameArea.stop();
+
+               } else {
+
+                   myGameArea.clear();
+
+                   myGamePiece_red.newPos();
+                   myGamePiece_red.update();
+
+//nova posição vermelho//
+
+                   myGamePiece_blue.update();
+                   myGamePiece_blue.newPos();
+
+                   //nova posição azul//
+
+                   myGamePiece_red.speedX = 0;
+
+                   myGamePiece_red.speedY = 0;
+
+                   myGamePiece_blue.speedX = 0;
+
+                   myGamePiece_blue.speedY = 0;                   
+
+                   //se bater para, senão atualiza//
+
+                   if (myGameArea.key && myGameArea.key == 37) {myGamePiece_red.speedX = -1; }
+
+                   if (myGameArea.key && myGameArea.key == 39) {myGamePiece_red.speedX = 1; }
+
+                   if (myGameArea.key && myGameArea.key == 38) {myGamePiece_red.speedY = -1; }
+
+                   if (myGameArea.key && myGameArea.key == 40) {myGamePiece_red.speedY = 1; }
+
+                   //seta esquerda, seta direita, seta cima, seta baixo//
+
+                   
+
+                   if (myGameArea.key && myGameArea.key == 65) {myGamePiece_blue.speedX = -1; }
+
+                   if (myGameArea.key && myGameArea.key == 68) {myGamePiece_blue.speedX = 1; }
+
+                   if (myGameArea.key && myGameArea.key == 87) {myGamePiece_blue.speedY = -1; }
+
+                   if (myGameArea.key && myGameArea.key == 83) {myGamePiece_blue.speedY = 1; }
+
+                   //A65, D68, W87, S83,//
+
+
+
+
+               }
+
+           }                    
+
+       </script>                
+
+                   <!-- Fim do Script do canvas-->
+
+   </head>
+
+   <body onload="startGame();">
+
+       <div>
+
+
+
+       </div>
+
 </body>
+
 </html>
